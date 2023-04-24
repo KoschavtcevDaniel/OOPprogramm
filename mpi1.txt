@@ -170,3 +170,39 @@ int main(int argc, char** argv)
 
 }
 
+
+
+#include "mpi.h"
+#include <stdio.h>
+#include <iostream>
+using namespace std;
+int main(int argc, char** argv)
+{
+	int numtasks, rank, next, prev, buf[2], tag1 = 1, tag2 = 2;
+	MPI_Request reqs[4];
+	MPI_Status stats[4];
+	double startwtime = 0.0, endwtime;
+
+	MPI_Init(&argc, &argv);
+	MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
+	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+	prev = rank - 1;
+	next = rank + 1;
+	if (rank == 0) prev = numtasks - 1;
+	if (rank == (numtasks - 1)) next = 0;
+
+	MPI_Irecv(&buf[0], 1, MPI_INT, prev, tag1, MPI_COMM_WORLD, &reqs[0]);
+	MPI_Irecv(&buf[1], 1, MPI_INT, next, tag2, MPI_COMM_WORLD, &reqs[1]);
+	cout << "process" << prev << "get from" << next << " data of" << rank << endl;
+	MPI_Isend(&rank, 1, MPI_INT, prev, tag2, MPI_COMM_WORLD, &reqs[2]);
+	startwtime = MPI_Wtime();
+	MPI_Isend(&rank, 1, MPI_INT, next, tag1, MPI_COMM_WORLD, &reqs[3]);
+	cout << "process" << prev << "send to" << next << " data of" << rank << endl;
+	endwtime = MPI_Wtime();
+	cout << "time is" << endwtime - startwtime  << endl;
+
+	MPI_Waitall(4, reqs, stats);
+	MPI_Finalize();
+
+}
