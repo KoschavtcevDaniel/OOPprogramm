@@ -1,0 +1,5 @@
+﻿  Source.cpp
+Z:\mpi\MPI1.1\MPI1.1\Source.cpp(10,15): warning C4101: k: неиспользованная локальная переменная
+Z:\mpi\MPI1.1\MPI1.1\Source.cpp(10,42): warning C4101: iend: неиспользованная локальная переменная
+Z:\mpi\MPI1.1\MPI1.1\Source.cpp(10,36): warning C4101: ibeg: неиспользованная локальная переменная
+  MPI1.1.vcxproj -> Z:\mpi\MPI1.1\Debug\MPI1.1.exe
